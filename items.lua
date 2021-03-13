@@ -1,3 +1,5 @@
+local is_creative_enabled = minetest.is_creative_enabled
+
 minetest.register_craftitem("mc_economy:money", {
 	description = "Money",
 	inventory_image = "default_stone.png",
@@ -5,7 +7,9 @@ minetest.register_craftitem("mc_economy:money", {
 		if placer:is_player() then
 			mc_economy.add_player_balance(placer:get_player_name(), 1000*itemstack:get_count(), true)
 		end
-		itemstack:clear()
+		if not is_creative_enabled(placer:get_player_name()) then
+			itemstack:clear()
+		end
 		return itemstack
 	end,
 })

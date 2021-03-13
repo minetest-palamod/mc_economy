@@ -1,4 +1,5 @@
 local storage = minetest.get_mod_storage()
+local is_creative_enabled = minetest.is_creative_enabled
 local C = minetest.colorize
 
 local default_amount = 0
@@ -18,6 +19,10 @@ function mc_economy.add_player_balance(playername, value, notification, from)
 		minetest.chat_send_player(playername, "You received "..tostring(value).."$")
 	end
 	return storage:set_int(playername, storage:get_int(playername) + value)
+end
+
+function mc_economy.reset_player_balance(playername)
+	return storage:set_int(playername, default_amount)
 end
 
 minetest.register_on_newplayer(function(player)
