@@ -1,0 +1,2 @@
+#    Default amount of money for new players
+mc_economy.default_money (Default Money) int 500

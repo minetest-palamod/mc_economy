@@ -1,4 +1,5 @@
 local is_creative_enabled = minetest.is_creative_enabled
+local S = minetest.get_translator(minetest.get_current_modname())
 
 minetest.register_craftitem("mc_economy:money", {
 	description = "Money",

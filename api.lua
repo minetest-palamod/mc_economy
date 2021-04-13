@@ -1,8 +1,10 @@
 local storage = minetest.get_mod_storage()
 local is_creative_enabled = minetest.is_creative_enabled
 local C = minetest.colorize
+local log = minetest.log
+local S = minetest.get_translator(minetest.get_current_modname())
 
-local default_amount = 0
+local default_amount = minetest.settings:get("mc_economy.default_money") or 500
 
 function mc_economy.get_player_balance(playername)
 	return storage:get_int(playername)

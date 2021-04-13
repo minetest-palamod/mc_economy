@@ -7,7 +7,7 @@ minetest.register_chatcommand("pay", {
 		if (param == "") then
 			return false, S("Error: No params specified.")
 		end
-		params = {}
+		local params = {}
 		for substring in param:gmatch("%S+") do
 		   table.insert(params, substring)
 		end
@@ -19,5 +19,14 @@ minetest.register_chatcommand("pay", {
 		else
 			return false, "Failed"
 		end
+	end,
+})
+
+minetest.register_chatcommand("money", {
+	params = "",
+	description = "Get your money",
+	func = function(name, param)
+		return true, mc_economy.get_player_balance(name)
+		--return false, "Failed"
 	end,
 })
