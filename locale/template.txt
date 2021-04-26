@@ -1,0 +1,2 @@
+# textdomain: mc_economy
+Money=
