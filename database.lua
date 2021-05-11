@@ -6,7 +6,9 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local worldpath = minetest.get_worldpath()
 
 local ie = minetest.request_insecure_environment()
-assert(ie, "Cannot access insecure environment!")
+if not ie then
+	error("Cannot access insecure environment!")
+end
 
 local sql = ie.require("lsqlite3")
 -- Prevent other mods from using the global sqlite3 library

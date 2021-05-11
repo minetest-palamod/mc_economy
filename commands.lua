@@ -29,7 +29,7 @@ minetest.register_chatcommand("money", {
 	params = "",
 	description = "Get your money",
 	func = function(name, param)
-		return true, money_msg..mc_economy.get_player_balance(name)
+		return true, money_msg..mc_economy.get_player_balance(name).." "..S("Dollars")
 		--return false, "Failed"
 	end,
 })
