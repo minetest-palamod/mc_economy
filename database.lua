@@ -6,14 +6,12 @@ local S = minetest.get_translator(minetest.get_current_modname())
 local worldpath = minetest.get_worldpath()
 
 local ie = minetest.request_insecure_environment()
-if not ie then
-	error("Cannot access insecure environment!")
-end
+assert(ie, "Cannot access insecure environment!")
 
 local sql = ie.require("lsqlite3")
--- Remove public table
+-- Prevent other mods from using the global sqlite3 library
 if sqlite3 then
-	sqlite3 = nil
+    sqlite3 = nil
 end
 
 local db = sql.open(worldpath .. "/mc_economy.sqlite3")
@@ -107,5 +105,18 @@ function mc_economy.get_player_balance(playername)
 end
 
 function mc_economy.set_player_balance(playername, value)
-	return storage:set_int(playername, value)
+	sql_exec(
+        ("UPDATE money SET amount WHERE player = %i LIMIT 1;")
+        :format(playername)
+    )
 end
+
+minetest.register_on_joinplayer(function(player)
+    local name = player:get_player_name()
+	if not mc_economy.get_player_balance(name) then
+        sql_exec(
+			("INSERT INTO money VALUES (%i, %s);")
+			:format(name, default_amount)
+		)
+    end
+end)
