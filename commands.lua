@@ -1,4 +1,5 @@
 local S = minetest.get_translator(minetest.get_current_modname())
+local C = minetest.colorize
 
 minetest.register_chatcommand("pay", {
 	params = "<playername> <amount>",
@@ -22,11 +23,13 @@ minetest.register_chatcommand("pay", {
 	end,
 })
 
+local money_msg = C(mcl_colors.DARK_GREEN, "[").."Money"..C(mcl_colors.DARK_GREEN, "] Balance: ")
+
 minetest.register_chatcommand("money", {
 	params = "",
 	description = "Get your money",
 	func = function(name, param)
-		return true, mc_economy.get_player_balance(name)
+		return true, money_msg..mc_economy.get_player_balance(name)
 		--return false, "Failed"
 	end,
 })
