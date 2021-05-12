@@ -1,2 +1,4 @@
 # textdomain: mc_economy
 Money=Argent
+You received @1$=Vous avez reçu @1$
+You received @1$ from @2=Vous avez reçu @1$ de la part de @2

@@ -8,9 +8,11 @@ local default_amount = minetest.settings:get("mc_economy.default_money") or 500
 
 function mc_economy.add_player_balance(playername, value, notification, from)
 	if from then
-		minetest.chat_send_player(playername, "You received "..tostring(value).."$ from "..from)
+		--minetest.chat_send_player(playername, "You received "..tostring(value).."$ from "..from)
+		minetest.chat_send_player(playername, C(mcl_colors.GREEN, S("You received @1$ from @2", C(mcl_colors.YELLOW, tostring(value)), C(mcl_colors.YELLOW, from))))
 	else
-		minetest.chat_send_player(playername, "You received "..tostring(value).."$")
+		--minetest.chat_send_player(playername, "You received "..tostring(value).."$")
+		minetest.chat_send_player(playername, C(mcl_colors.GREEN, S("You received @1$", C(mcl_colors.YELLOW, tostring(value)))))
 	end
 	return mc_economy.set_player_balance(playername, mc_economy.get_player_balance(playername) + value)
 end
