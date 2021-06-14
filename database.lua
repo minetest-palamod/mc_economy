@@ -10,6 +10,9 @@ if not ie then
 	error("Cannot access insecure environment!")
 end
 
+--local libpath = minetest.settings:get("mc_economy.lsqlite3_path") or ""
+package.cpath = "/usr/local/lib/lua/5.1/?.so"--..libpath
+
 local sql = ie.require("lsqlite3")
 -- Prevent other mods from using the global sqlite3 library
 if sqlite3 then
@@ -31,12 +34,7 @@ local function sql_row(q)
 	end
 end
 
-sql_exec([[
-CREATE TABLE IF NOT EXISTS money (
-	player TEXT,
-	amount INTEGER,
-);
-]])
+sql_exec("CREATE TABLE IF NOT EXISTS money (player TEXT, amount INTEGER)")
 
 --[[ function s_protect.load_db() end
 function s_protect.load_shareall() end
@@ -107,18 +105,12 @@ function mc_economy.get_player_balance(playername)
 end
 
 function mc_economy.set_player_balance(playername, value)
-	sql_exec(
-        ("UPDATE money SET amount WHERE player = %i LIMIT 1;")
-        :format(playername)
-    )
+	sql_exec(string.format("UPDATE money SET amount WHERE player = %i LIMIT 1", playername))
 end
 
 minetest.register_on_joinplayer(function(player)
     local name = player:get_player_name()
 	if not mc_economy.get_player_balance(name) then
-        sql_exec(
-			("INSERT INTO money VALUES (%i, %s);")
-			:format(name, default_amount)
-		)
+        sql_exec(string.format("INSERT INTO money VALUES (%i, %s)", name, default_amount))
     end
 end)
