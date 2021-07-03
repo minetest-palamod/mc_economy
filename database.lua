@@ -11,7 +11,7 @@ if not ie then
 end
 
 --local libpath = minetest.settings:get("mc_economy.lsqlite3_path") or ""
-package.cpath = "/usr/local/lib/lua/5.1/?.so"--..libpath
+--package.cpath = "/usr/local/lib/lua/5.1/?.so"--..libpath
 
 local sql = ie.require("lsqlite3")
 -- Prevent other mods from using the global sqlite3 library
@@ -19,11 +19,11 @@ if sqlite3 then
     sqlite3 = nil
 end
 
-local db = sql.open(worldpath .. "/mc_economy.sqlite3")
+local db = sql.open(worldpath .. "/mc_economy.sqlite")
 
 local function sql_exec(q)
 	if db:exec(q) ~= sql.OK then
-		minetest.log("info", "[mc_economy] lSQLite: " .. db:errmsg())
+		minetest.log("error", "[mc_economy] lSQLite: " .. db:errmsg())
 	end
 end
 
@@ -34,7 +34,11 @@ local function sql_row(q)
 	end
 end
 
-sql_exec("CREATE TABLE IF NOT EXISTS money (player TEXT, amount INTEGER)")
+sql_exec([[
+	CREATE TABLE IF NOT EXISTS money(
+		player TEXT PRIMARY KEY NOT NULL,
+		amount INTEGER NOT NULL
+);]])
 
 --[[ function s_protect.load_db() end
 function s_protect.load_shareall() end
@@ -96,12 +100,12 @@ function s_protect.get_claim(cpos)
 	return id, row
 end ]]
 
-
-
-local default_amount = minetest.settings:get("mc_economy.default_money") or 500
+local default_amount = tonumber(minetest.settings:get("mc_economy.default_money")) or 500
 
 function mc_economy.get_player_balance(playername)
-	return sql_row("SELECT amount FROM money WHERE player = "..playername)
+	local i = db:exec("SELECT amount FROM money WHERE player = '"..playername.."'")
+	minetest.log("warning", "[DATABASE] "..i)
+	return i
 end
 
 function mc_economy.set_player_balance(playername, value)
@@ -110,7 +114,13 @@ end
 
 minetest.register_on_joinplayer(function(player)
     local name = player:get_player_name()
-	if not mc_economy.get_player_balance(name) then
-        sql_exec(string.format("INSERT INTO money VALUES (%i, %s)", name, default_amount))
-    end
+	--if not mc_economy.get_player_balance(name) then
+	local pre = db:prepare("INSERT INTO money VALUES (?, ?)")
+    --sql_exec(string.format("INSERT INTO money VALUES ('%i', %i)", name, tonumber(500)))
+    --end
+	sql_exec("BEGIN")
+	pre:bind_values(name, 500)
+	pre:step()
+	pre:reset()
+	sql_exec("COMMIT")
 end)
