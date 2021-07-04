@@ -12,7 +12,7 @@ local db = db_manager.database("mc_economy:economy", db_manager.get_schemat("mc_
 function mc_economy.get_player_balance(playername)
 	local t = db:get_rows(string.format("SELECT * FROM money WHERE player = '%s' LIMIT 1", playername))
 	minetest.log("error", dump(t))
-	return db:get_rows(string.format("SELECT * FROM money WHERE player = '%s' LIMIT 1", playername))[1].amount
+	return t[1].amount
 end
 
 mc_economy.OK = 0
