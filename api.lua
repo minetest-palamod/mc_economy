@@ -9,10 +9,17 @@ local default_amount = minetest.settings:get("mc_economy.default_money") or 500
 
 local db = db_manager.database("mc_economy:economy", db_manager.get_schemat("mc_economy:sql/database.sql"))
 
+local cached_balance = {}
+
 function mc_economy.get_player_balance(playername)
-	local t = db:get_rows(string.format("SELECT * FROM money WHERE player = '%s' LIMIT 1", playername))
-	minetest.log("error", dump(t))
-	return t[1].amount
+	if cached_balance[playername] then
+		return cached_balance[playername]
+	else
+		local t = db:get_rows(string.format("SELECT * FROM money WHERE player = '%s' LIMIT 1", playername))
+		minetest.log("error", dump(t))
+		cached_balance[playername] = t[1].amount
+		return t[1].amount
+	end
 end
 
 mc_economy.OK = 0
@@ -29,6 +36,7 @@ function mc_economy.transaction(player1, player2, amount)
 			"COMMIT;",
 		}, "\n")
 		db:exec(request)
+		cached_balance[player2] = balance2 + amount
 		return 0
 	elseif player2 == "SERVER" then
 		local balance1 = mc_economy.get_player_balance(player1)
@@ -39,6 +47,7 @@ function mc_economy.transaction(player1, player2, amount)
 			"COMMIT;",
 		}, "\n")
 		db:exec(request)
+		cached_balance[player1] = balance1 - amount
 		return 0
 	else
 		local balance1 = mc_economy.get_player_balance(player1)
@@ -55,6 +64,8 @@ function mc_economy.transaction(player1, player2, amount)
 			--exec(string.format("INSERT INTO transactions(player1, player2, amount) VALUES ('%s', '%s', %s)", player1, player2, amount))
 			--exec(string.format("UPDATE money SET amount=%s WHERE player='%s'", balance2 + amount, player2))
 			db:exec(request)
+			cached_balance[player1] = balance1 - amount
+			cached_balance[player2] = balance2 + amount
 			return 0
 		else
 			return 1
@@ -73,5 +84,5 @@ minetest.register_on_newplayer(function(player)
 end)
 
 minetest.register_on_prejoinplayer(function(name)
-	if name == "SERVER" then return "This name isn't allowed!" end
+	if name == "SERVER" or name == "unknown" then return "This name isn't allowed!" end
 end)
