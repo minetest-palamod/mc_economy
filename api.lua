@@ -1,8 +1,3 @@
-local is_creative_enabled = minetest.is_creative_enabled
-local C = minetest.colorize
-local log = minetest.log
-local S = minetest.get_translator(minetest.get_current_modname())
-
 local string = string
 
 local default_amount = minetest.settings:get("mc_economy.default_money") or 500
