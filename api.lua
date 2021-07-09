@@ -77,6 +77,11 @@ function mc_economy.reset_player_balance(playername)
 	return
 end
 
+function mc_economy.get_baltop(number)
+	number = number or 10
+	return db:get_rows(string.format("SELECT * FROM money ORDER BY money.amount DESC LIMIT %s;", number))
+end
+
 minetest.register_on_newplayer(function(player)
 	local name = player:get_player_name()
 	db:exec(string.format("INSERT INTO money VALUES ('%s', 0)", name))
