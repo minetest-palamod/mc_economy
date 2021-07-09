@@ -34,8 +34,4 @@ read_globals = {
     
     --OTHER
     "mcl_vars",
-	
-	-- PALAMOD
-	--------------------------------------------
-	"pala_dynamite",
 }
