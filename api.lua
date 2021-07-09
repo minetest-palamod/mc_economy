@@ -26,7 +26,8 @@ function mc_economy.transaction(player1, player2, amount)
 		local balance2 = mc_economy.get_player_balance(player2)
 		local request = table.concat({
 			"BEGIN;",
-			string.format("INSERT INTO transactions(date, player1, player2, amount) VALUES ('%s', '%s', '%s', %s);", time, player1, player2, amount),
+			string.format("INSERT INTO transactions(date, player1, player2, amount) VALUES ('%s', '%s', '%s', %s);",
+				time, player1, player2, amount),
 			string.format("UPDATE money SET amount=%s WHERE player='%s';", balance2 + amount, player2),
 			"COMMIT;",
 		}, "\n")
@@ -38,7 +39,8 @@ function mc_economy.transaction(player1, player2, amount)
 		local request = table.concat({
 			"BEGIN;",
 			string.format("UPDATE money SET amount=%s WHERE player='%s';", balance1 - amount, player1),
-			string.format("INSERT INTO transactions(date, player1, player2, amount) VALUES ('%s', '%s', '%s', %s);", time, player1, player2, amount),
+			string.format("INSERT INTO transactions(date, player1, player2, amount) VALUES ('%s', '%s', '%s', %s);",
+				time, player1, player2, amount),
 			"COMMIT;",
 		}, "\n")
 		db:exec(request)
@@ -51,12 +53,14 @@ function mc_economy.transaction(player1, player2, amount)
 			local request = table.concat({
 				"BEGIN;",
 				string.format("UPDATE money SET amount=%s WHERE player='%s';", balance1 - amount, player1),
-				string.format("INSERT INTO transactions(date, player1, player2, amount) VALUES ('%s', '%s', '%s', %s);", time, player1, player2, amount),
+				string.format("INSERT INTO transactions(date, player1, player2, amount) VALUES ('%s', '%s', '%s', %s);",
+					time, player1, player2, amount),
 				string.format("UPDATE money SET amount=%s WHERE player='%s';", balance2 + amount, player2),
 				"COMMIT;",
 			}, "\n")
 			--exec(string.format("UPDATE money SET amount=%s WHERE player='%s'", balance1 - amount, player1))
-			--exec(string.format("INSERT INTO transactions(player1, player2, amount) VALUES ('%s', '%s', %s)", player1, player2, amount))
+			--exec(string.format("INSERT INTO transactions(player1, player2, amount) VALUES ('%s', '%s', %s)",
+			--	player1, player2, amount))
 			--exec(string.format("UPDATE money SET amount=%s WHERE player='%s'", balance2 + amount, player2))
 			db:exec(request)
 			cached_balance[player1] = balance1 - amount
