@@ -80,7 +80,9 @@ end
 minetest.register_on_newplayer(function(player)
 	local name = player:get_player_name()
 	db:exec(string.format("INSERT INTO money VALUES ('%s', 0)", name))
-	mc_economy.transaction("SERVER", name, default_amount)
+	if default_amount > 0 then
+		mc_economy.transaction("SERVER", name, default_amount)
+	end
 end)
 
 minetest.register_on_prejoinplayer(function(name)
