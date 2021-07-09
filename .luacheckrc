@@ -14,6 +14,9 @@ read_globals = {
     "vector", "ItemStack",
     "dump", "DIR_DELIM", "VoxelArea", "Settings",
 
+	-- Database Manager
+	"db_manager",
+
     -- MCL
 	--------------------------------------------
     -- CORE
