@@ -1,7 +1,7 @@
 [*]
 end_of_line = lf
 
-[*.lua]
+[*.{lua,sql}]
 charset = utf8
 indent_size = 4
 indent_style = tab
