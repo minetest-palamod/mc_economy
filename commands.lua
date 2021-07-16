@@ -53,7 +53,7 @@ mc_economy.ah = {}
 local form = table.concat({
 	"formspec_version[4]",
 	"size[7.8,9]",
-	"label[0.2,0.3;Close <--]",
+	--"label[0.2,0.3;Close <--]",
 	"button_exit[0,0;1.3,0.50;exitbutton;Close <--]",
 	"style[exitbutton;alpha=true,bgcolor=#000000FF,border=false]",
 	"box[5.5,1;2,0.7;#313131]",
