@@ -1,2 +1,5 @@
 #    Default amount of money for new players
 mc_economy.default_money (Default Money) int 500
+
+#    Experimental features for testing purpose
+mc_economy.experimental (Experimental features) bool false
