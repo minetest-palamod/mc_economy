@@ -94,9 +94,8 @@ local function get_formspec(type)
 	local form = table.concat({
 		"formspec_version[4]",
 		"size[7.8,9]",
-		--"label[0.2,0.3;Close <--]",
+		"style[ah_home;bgimg=blank.png;bgimg_pressed=blank.png;bgimg_middle=blank.png]",
 		"button[0,0;1.3,0.50;ah_home;Back <--]",
-		"style[exitbutton;border=false]",
 		"box[5.5,1;2,0.7;#313131]",
 		"tooltip[5.5,1;2,0.7;"..F("You have 30.000 dollars").."]",
 		"hypertext[0.4,0.3;7,1;shop;<global valign=middle halign=center size=18 color=#313131>"
@@ -124,9 +123,8 @@ end
 local form = table.concat({
 	"formspec_version[4]",
 	"size[7.8,9]",
-	--"label[0.2,0.3;Close <--]",
+	"style[exitbutton;bgimg=blank.png;bgimg_pressed=blank.png;bgimg_middle=blank.png]",
 	"button_exit[0,0;1.3,0.50;exitbutton;Close <--]",
-	"style[exitbutton;border=false]",
 	"box[5.5,1;2,0.7;#313131]",
 	"tooltip[5.5,1;2,0.7;"..F("You have 30.000 dollars").."]",
 	--[["hypertext[0.2,0.3;7,1;close_label;
