@@ -90,14 +90,14 @@ mc_economy.ah.add_item("blocs", "mcl_core:cobblestone")
 mc_economy.ah.add_item("blocs", "mcl_core:dirt")
 mc_economy.ah.add_item("blocs", "mcl_core:dirt_with_grass")
 
-local function get_formspec(type)
+local function get_categorie_formspec(playername, type)
 	local form = table.concat({
 		"formspec_version[4]",
 		"size[7.8,9]",
 		"style[ah_home;bgimg=blank.png;bgimg_pressed=blank.png;bgimg_middle=blank.png]",
 		"button[0,0;1.3,0.50;ah_home;Back <--]",
 		"box[5.5,1;2,0.7;#313131]",
-		"tooltip[5.5,1;2,0.7;"..F("You have 30.000 dollars").."]",
+		"tooltip[5.5,1;2,0.7;"..F(S("You have @1 dollars", mc_economy.get_player_balance(playername))).."]",
 		"hypertext[0.4,0.3;7,1;shop;<global valign=middle halign=center size=18 color=#313131>"
 			..mc_economy.ah.categories[type].desc.."]",
 		"container[0.4,2]", --;7,6]",
@@ -120,31 +120,35 @@ end
 
 --formspec_version[4]size[7.8,9]label[0.2,0.3;Close <--]box[0.4,2;7,6;]
 --https://youtu.be/tQwDGtxZiHs?t=467
-local form = table.concat({
-	"formspec_version[4]",
-	"size[7.8,9]",
-	"style[exitbutton;bgimg=blank.png;bgimg_pressed=blank.png;bgimg_middle=blank.png]",
-	"button_exit[0,0;1.3,0.50;exitbutton;Close <--]",
-	"box[5.5,1;2,0.7;#313131]",
-	"tooltip[5.5,1;2,0.7;"..F("You have 30.000 dollars").."]",
-	--[["hypertext[0.2,0.3;7,1;close_label;
-		<global valign=top halign=right size=16 color=#313131><action name=quit color=#313131>Close <--</action>]",]]
-	"hypertext[0.4,0.3;7,1;shop;<global valign=middle halign=center size=18 color=#313131>Shop]",
-	"container[0.4,2]", --;7,6]",
-	"box[0,0;7,5;#313131]",
-	"button[0,0;7,0.75;blocs;Blocs]",
-	"button[0,0.75;7,0.75;minerals;Minerals]",
-	"button[0,1.5;7,0.75;plants;Plants]",
-	"button[0,2.25;7,0.75;other;Other]",
-	"container_end[]",
-})
+
+local function get_main_formspec(playername)
+	return table.concat({
+		"formspec_version[4]",
+		"size[7.8,9]",
+		"style[exitbutton;bgimg=blank.png;bgimg_pressed=blank.png;bgimg_middle=blank.png]",
+		"button_exit[0,0;1.3,0.50;exitbutton;Close <--]",
+		"box[5.5,1;2,0.7;#313131]",
+		"tooltip[5.5,1;2,0.7;"..F(S("You have @1 dollars", mc_economy.get_player_balance(playername))).."]",
+		--[["hypertext[0.2,0.3;7,1;close_label;
+			<global valign=top halign=right size=16 color=#313131><action name=quit color=#313131>Close <--</action>]",]]
+		"hypertext[0.4,0.3;7,1;shop;<global valign=middle halign=center size=18 color=#313131>Shop]",
+		"container[0.4,2]", --;7,6]",
+		"box[0,0;7,5;#313131]",
+		"button[0,0;7,0.75;blocs;Blocs]",
+		"button[0,0.75;7,0.75;minerals;Minerals]",
+		"button[0,1.5;7,0.75;plants;Plants]",
+		"button[0,2.25;7,0.75;other;Other]",
+		"container_end[]",
+	})
+end
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "mc_economy:ah" then
+		local playername = player:get_player_name()
 		if fields.ah_home then
-			minetest.show_formspec(player:get_player_name(), "mc_economy:ah", form)
+			minetest.show_formspec(playername, "mc_economy:ah", get_main_formspec(playername))
 		elseif fields.blocs then
-			minetest.show_formspec(player:get_player_name(), "mc_economy:ah", get_formspec("blocs"))
+			minetest.show_formspec(playername, "mc_economy:ah", get_categorie_formspec(player:get_player_name(), "blocs"))
 		end
 	end
 end)
@@ -153,7 +157,7 @@ minetest.register_chatcommand("ah", {
 	params = "",
 	description = "Get your money",
 	func = function(name, param)
-		minetest.show_formspec(name, "mc_economy:ah", form)
+		minetest.show_formspec(name, "mc_economy:ah", get_main_formspec(name))
 		return true
 	end,
 })
