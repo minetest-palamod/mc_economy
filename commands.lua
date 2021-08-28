@@ -119,11 +119,14 @@ local function get_categorie_formspec(playername, type)
 		"size[7.8,9]",
 		"style[ah_home;bgimg=blank.png;bgimg_pressed=blank.png;bgimg_middle=blank.png]",
 		"button[0,0;1.3,0.50;ah_home;Back <--]",
-		"box[5.5,1;2,0.7;#313131]",
+		--"box[5.5,1;2,0.7;#313131]",
+		"image[5.5,1;2,0.7;mc_economy_gray_background9.png;7]",
 		"tooltip[5.5,1;2,0.7;"..F(S("You have @1 dollars", mc_economy.get_player_balance(playername))).."]",
 		"hypertext[0.4,0.3;7,1;shop;<global valign=middle halign=center size=18 color=#313131>"
 			..mc_economy.ah.categories[type].desc.."]",
+		"image[0.3,1.9;7.2,5.2;mc_economy_gray_background9.png;7]",
 		"container[0.4,2]", --;7,6]",
+		"style_type[button;font_size=18]",
 		"box[0,0;7,5;#313131]",
 	})
 	local nb = 0
@@ -153,13 +156,15 @@ local function get_main_formspec(playername)
 		"size[7.8,9]",
 		"style[exitbutton;bgimg=blank.png;bgimg_pressed=blank.png;bgimg_middle=blank.png]",
 		"button_exit[0,0;1.3,0.50;exitbutton;Close <--]",
-		"box[5.5,1;2,0.7;#313131]",
+		--"box[5.5,1;2,0.7;#313131]",
+		"image[5.5,1;2,0.7;mc_economy_gray_background9.png;7]",
 		"tooltip[5.5,1;2,0.7;"..F(S("You have @1 dollars", mc_economy.get_player_balance(playername))).."]",
 		--[["hypertext[0.2,0.3;7,1;close_label;
 			<global valign=top halign=right size=16 color=#313131><action name=quit color=#313131>Close <--</action>]",]]
 		"hypertext[0.4,0.3;7,1;shop;<global valign=middle halign=center size=18 color=#313131>Shop]",
 		"image[0.3,1.9;7.2,5.2;mc_economy_gray_background9.png;7]",
 		"container[0.4,2]", --;7,6]",
+		"style_type[button;font_size=18]",
 		--"box[0,0;7,5;#313131]",
 		"button[0,0;7,0.75;blocs;Blocs]",
 		"button[0,0.75;7,0.75;minerals;Minerals]",
