@@ -90,6 +90,29 @@ mc_economy.ah.add_item("blocs", "mcl_core:cobblestone")
 mc_economy.ah.add_item("blocs", "mcl_core:dirt")
 mc_economy.ah.add_item("blocs", "mcl_core:dirt_with_grass")
 
+--[[
+formspec_version[4]
+size[7.8,9]
+style[ah_home;bgimg=blank.png;bgimg_pressed=blank.png;bgimg_middle=blank.png]
+button[0,0;1.3,0.50;ah_home;Back <--]
+box[5.5,1;2,0.7;#313131]
+tooltip[5.5,1;2,0.7:you]
+hypertext[0.4,0.3;7,1;shop;<global valign=middle halign=center size=18 color=#313131>]
+box[0.4,2;6.7,5;#313131]
+scrollbaroptions[min=1;max=8;smallstep=1;largestep=1;thumbsize=1]
+scrollbar[7.1,2;0.3,5;vertical;scroll_bar;1]
+scroll_container[0.4,2;6.7,5;scroll_bar;vertical;]
+button[0,0;6.7,0.75;air;air]
+button[0,0.75;6.7,0.75;air;air]
+button[0,1.5;6.7,0.75;air;air]
+button[0,2.25;6.7,0.75;air;air]
+button[0,3;6.7,0.75;air;air]
+button[0,3.75;6.7,0.75;airg;airg]
+button[0,4.5;6.7,0.75;air;air]
+button[0,5.25;6.7,0.75;air;air]
+scroll_container_end[]
+]]
+
 local function get_categorie_formspec(playername, type)
 	local form = table.concat({
 		"formspec_version[4]",
