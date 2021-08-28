@@ -144,6 +144,9 @@ end
 --formspec_version[4]size[7.8,9]label[0.2,0.3;Close <--]box[0.4,2;7,6;]
 --https://youtu.be/tQwDGtxZiHs?t=467
 
+--mc_economy_gray_background9.png
+--7
+
 local function get_main_formspec(playername)
 	return table.concat({
 		"formspec_version[4]",
@@ -155,8 +158,9 @@ local function get_main_formspec(playername)
 		--[["hypertext[0.2,0.3;7,1;close_label;
 			<global valign=top halign=right size=16 color=#313131><action name=quit color=#313131>Close <--</action>]",]]
 		"hypertext[0.4,0.3;7,1;shop;<global valign=middle halign=center size=18 color=#313131>Shop]",
+		"image[0.3,1.9;7.2,5.2;mc_economy_gray_background9.png;7]",
 		"container[0.4,2]", --;7,6]",
-		"box[0,0;7,5;#313131]",
+		--"box[0,0;7,5;#313131]",
 		"button[0,0;7,0.75;blocs;Blocs]",
 		"button[0,0.75;7,0.75;minerals;Minerals]",
 		"button[0,1.5;7,0.75;plants;Plants]",
