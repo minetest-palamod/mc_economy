@@ -6,6 +6,7 @@ mc_economy = {}
 
 dofile(modpath.."/api.lua")
 dofile(modpath.."/items.lua")
+dofile(modpath.."/ah.lua")
 
 if minetest.settings:get_bool("mc_economy.experimental", false) then
 	dofile(modpath.."/commands.lua")
