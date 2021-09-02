@@ -2,6 +2,8 @@ local S = minetest.get_translator(minetest.get_current_modname())
 --local C = minetest.colorize
 local F = minetest.formspec_escape
 
+local modname = minetest.get_current_modname()
+
 local pairs = pairs
 local table = table
 local string = string
@@ -14,16 +16,19 @@ local string = string
 --credit http://lua-users.org/wiki/FormattingNumbers
 --credit http://richard.warburton.it
 
-function money_format(n)
+local function money_format(n)
 	local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
 	return left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right
 end
+
+---------
+---------
 
 mc_economy.ah = {}
 
 mc_economy.ah.categories = {
 	blocs = {
-		desc = S("Blocs"),
+		desc = S("Blocks"),
 		items = {},
 	},
 	minerals = {
@@ -42,14 +47,14 @@ mc_economy.ah.categories = {
 
 function mc_economy.ah.add_item(category, itemname)
 	if not mc_economy.ah.categories[category] then
-		error("[mc_economy] Mod '"..minetest.get_current_modname().."' tried to add item to ah with wrong category '"..category.."'")
+		error("[mc_economy] Mod '"..modname.."' tried to add item to ah with wrong category '"..category.."'")
 	end
 	table.insert(mc_economy.ah.categories[category].items, itemname)
 end
 
 function mc_economy.ah.remove_item(category, itemname)
 	if not mc_economy.ah.categories[category] then
-		error("[mc_economy] Mod '"..minetest.get_current_modname().."' tried to remove item from ah with wrong category '"..category.."'")
+		error("[mc_economy] Mod '"..modname.."' tried to remove item from ah with wrong category '"..category.."'")
 	end
 	for i,name in pairs(mc_economy.ah.categories[category].items) do
 		if name == itemname then
@@ -88,15 +93,27 @@ button[0,5.25;6.7,0.75;air;air]
 scroll_container_end[]
 ]]
 
+
+local function get_money_form(amount)
+	local formated_amount = money_format(amount)
+	return table.concat({
+		"box[5.5,1;2,0.7;#313131]",                                                --tmp gray border
+		--"image[5.5,1;2,0.7;mc_economy_gray_background9.png;7]",                  --activate then 9 sliced mage are availlable
+		"image[5.55,1.1;0.5,0.5;mc_economy_coins.png]",                            --coins image
+		"hypertext[5.6,1.05;2,0.7;balance;<global valign=middle halign=center size=18>"..
+			formated_amount.."]",                                                  --rounded amount
+		"tooltip[5.5,1;2,0.7;"..F(S("You have @1 dollars", formated_amount)).."]", --full amount in a tooltip
+	})
+end
+
 local function get_categorie_formspec(playername, type)
+	local amount = mc_economy.get_player_balance(playername)
 	local form = table.concat({
 		"formspec_version[4]",
 		"size[7.8,9]",
 		"style[ah_home;bgimg=blank.png;bgimg_pressed=blank.png;bgimg_middle=blank.png]",
 		"button[0,0;1.3,0.50;ah_home;Back <--]",
-		"box[5.5,1;2,0.7;#313131]",
-		--"image[5.5,1;2,0.7;mc_economy_gray_background9.png;7]",
-		"tooltip[5.5,1;2,0.7;"..F(S("You have @1 dollars", mc_economy.get_player_balance(playername))).."]",
+		get_money_form(amount),
 		"hypertext[0.4,0.3;7,1;shop;<global valign=middle halign=center size=18 color=#313131>"
 			..mc_economy.ah.categories[type].desc.."]",
 		"box[0.3,1.9;7.2,5.2;#313131]",
@@ -128,18 +145,12 @@ end
 
 local function get_main_formspec(playername)
 	local amount = mc_economy.get_player_balance(playername)
-	local formated_amount = money_format(amount)
 	return table.concat({
 		"formspec_version[4]",
 		"size[7.8,9]",
 		"style[exitbutton;bgimg=blank.png;bgimg_pressed=blank.png;bgimg_middle=blank.png]",
 		"button_exit[0,0;1.3,0.50;exitbutton;Close <--]",
-		"box[5.5,1;2,0.7;#313131]",
-		"image[5.55,1.1;0.5,0.5;mc_economy_coins.png]",
-		--"image[5.5,1;2,0.7;mc_economy_gray_background9.png;7]", <--- activate then 9 sliced mage are availlable
-		"hypertext[5.6,1.05;2,0.7;balance;<global valign=middle halign=center size=18>"..
-			formated_amount.."]",
-		"tooltip[5.5,1;2,0.7;"..F(S("You have @1 dollars", formated_amount)).."]",
+		get_money_form(amount),
 		--[["hypertext[0.2,0.3;7,1;close_label;
 			<global valign=top halign=right size=16 color=#313131><action name=quit color=#313131>Close <--</action>]",]]
 		"hypertext[0.4,0.3;7,1;shop;<global valign=middle halign=center size=18 color=#313131>Shop]",
