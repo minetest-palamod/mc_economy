@@ -8,6 +8,8 @@ local pairs = pairs
 local table = table
 local string = string
 
+local tostring = tostring
+
 
 ---------
 --UTILS--
@@ -17,8 +19,19 @@ local string = string
 --credit http://richard.warburton.it
 
 local function money_format(n)
-	local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
-	return left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right
+	local left, num, right = string.match(n, '^([^%d]*%d)(%d*)(.-)$')
+	return left..(num:reverse():gsub('(%d%d%d)', '%1,'):reverse())..right
+end
+
+--taken from https://stackoverflow.com/questions/25110721/format-long-number-to-shorter-version-in-lua
+local function money_format_short(n)
+    if n >= 10^6 then
+        return string.format("%.0fM", n / 10^6)
+    elseif n >= 10^3 then
+        return string.format("%.0fK", n / 10^3)
+    else
+        return tostring(n)
+    end
 end
 
 ---------
@@ -95,14 +108,13 @@ scroll_container_end[]
 
 
 local function get_money_form(amount)
-	local formated_amount = money_format(amount)
 	return table.concat({
 		"box[5.5,1;2,0.7;#313131]",                                                --tmp gray border
 		--"image[5.5,1;2,0.7;mc_economy_gray_background9.png;7]",                  --activate then 9 sliced mage are availlable
 		"image[5.55,1.1;0.5,0.5;mc_economy_coins.png]",                            --coins image
 		"hypertext[5.6,1.05;2,0.7;balance;<global valign=middle halign=center size=18>"..
-			formated_amount.."]",                                                  --rounded amount
-		"tooltip[5.5,1;2,0.7;"..F(S("You have @1 dollars", formated_amount)).."]", --full amount in a tooltip
+			money_format_short(amount).."]",                                                  --rounded amount
+		"tooltip[5.5,1;2,0.7;"..F(S("You have @1 dollars", money_format(amount))).."]", --full amount in a tooltip
 	})
 end
 
